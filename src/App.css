@@ -1,16 +1,9 @@
-.App {
-  text-align: center;
-  padding: 20px;
+/* App.css */
+.image {
+  max-width: 500px;
+  height: auto;
 }
 
-input[type="color"] {
-  margin: 20px 0;
-  width: 100px;
-  height: 50px;
-  border: none;
-}
-
-p {
-  font-size: 1.2rem;
-  margin: 10px 0;
+.canvas {
+  display: none;
 }

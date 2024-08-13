@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 // Define standard colors
 const standardColors = [
@@ -10,23 +10,19 @@ const standardColors = [
   { name: 'Magenta', rgb: [255, 0, 255], type: 'secondary' },
   { name: 'Orange', rgb: [255, 165, 0], type: 'tertiary' },
   { name: 'Purple', rgb: [128, 0, 128], type: 'tertiary' },
+  { name: 'White', rgb: [255, 255, 255], type: 'neutral' },
+  { name: 'Black', rgb: [0, 0, 0], type: 'neutral' },
+  { name: 'Brown', rgb: [165, 42, 42], type: 'neutral' },
+  { name: 'Gray', rgb: [128, 128, 128], type: 'neutral' },
   // Add more colors as needed
 ];
 
 function App() {
-  const [color, setColor] = useState('#ffffff');  // Initial color is white
+  const [color, setColor] = useState('#ffffff');
   const [colorNames, setColorNames] = useState([]);
-  const [closestColor, setClosestColor] = useState(null);  // Store the closest color info
-
-  const hexToRgb = (hex) => {
-    let r = 0, g = 0, b = 0;
-    if (hex.length === 7) {
-      r = parseInt(hex.slice(1, 3), 16);
-      g = parseInt(hex.slice(3, 5), 16);
-      b = parseInt(hex.slice(5, 7), 16);
-    }
-    return [r, g, b];
-  };
+  const [closestColor, setClosestColor] = useState(null);
+  const [imageSrc, setImageSrc] = useState(null);
+  const canvasRef = useRef(null);
 
   const calculateDistance = (rgb1, rgb2) => {
     return Math.sqrt(
@@ -51,13 +47,31 @@ function App() {
     return closest;
   };
 
-  const handleColorChange = async (event) => {
-    const newColor = event.target.value;
-    setColor(newColor);
+  const handleImageMouseMove = async (event) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
+    const context = canvas.getContext('2d');
+    const image = document.getElementById('image');
+    if (!context || !image) return;
+
+    const rect = image.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    canvas.width = image.width;
+    canvas.height = image.height;
+    context.drawImage(image, 0, 0, image.width, image.height);
+
+    const pixel = context.getImageData(x, y, 1, 1).data;
+    const rgb = [pixel[0], pixel[1], pixel[2]];
+    const hex = `#${rgb.map(value => value.toString(16).padStart(2, '0')).join('')}`;
+
+    setColor(hex);
+
+    // Fetch the color data from The Color API
     try {
-      // Fetch the color data from The Color API
-      const response = await fetch(`https://www.thecolorapi.com/id?hex=${newColor.slice(1)}`);
+      const response = await fetch(`https://www.thecolorapi.com/id?hex=${hex.slice(1)}`);
       const data = await response.json();
 
       // Extract color names safely
@@ -67,26 +81,40 @@ function App() {
       }
 
       setColorNames(names);
-
-      // Find the closest standard color
-      const rgb = hexToRgb(newColor);
-      const closest = findClosestColor(rgb);
-      setClosestColor(closest);
     } catch (error) {
       console.error('Error fetching the color names:', error);
-      setColorNames(['Unknown']);
-      setClosestColor(null);
+      setColorNames(['Unknown']);  // Fallback if the API fails
     }
+
+    const closest = findClosestColor(rgb);
+    setClosestColor(closest);
   };
 
   return (
     <div className="App">
-      <h1>Color Name Finder</h1>
+      <h1>Color Finder</h1>
       <input
-        type="color"
-        value={color}
-        onChange={handleColorChange}
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          const file = e.target.files[0];
+          if (file) {
+            setImageSrc(URL.createObjectURL(file));
+          }
+        }}
       />
+      {imageSrc && (
+        <>
+          <img
+            id="image"
+            src={imageSrc}
+            alt="Uploaded"
+            style={{ maxWidth: '100%', height: 'auto' }}
+            onMouseMove={handleImageMouseMove}
+          />
+          <canvas ref={canvasRef} style={{ display: 'none' }} />
+        </>
+      )}
       <p>Selected Color: {color}</p>
       <p>Possible Color Names:</p>
       <ul>
