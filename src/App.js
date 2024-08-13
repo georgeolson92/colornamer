@@ -2,20 +2,27 @@ import React, { useState } from 'react';
 
 function App() {
   const [color, setColor] = useState('#ffffff');  // Initial color is white
-  const [colorName, setColorName] = useState('White');
+  const [colorNames, setColorNames] = useState([]);  // Store multiple color names
 
   const handleColorChange = async (event) => {
     const newColor = event.target.value;
     setColor(newColor);
 
-    // Fetch the color name from The Color API
     try {
+      // Fetch the color data from The Color API
       const response = await fetch(`https://www.thecolorapi.com/id?hex=${newColor.slice(1)}`);
       const data = await response.json();
-      setColorName(data.name.value);
+
+      // Extract color names safely
+      const names = [data.name.value];
+      if (data.name.closest_named_hex && data.name.closest_named_hex !== data.name.value) {
+        names.push(data.name.closest_named_hex);
+      }
+
+      setColorNames(names);
     } catch (error) {
-      console.error('Error fetching the color name:', error);
-      setColorName('Unknown');  // Fallback if the API fails
+      console.error('Error fetching the color names:', error);
+      setColorNames(['Unknown']);  // Fallback if the API fails
     }
   };
 
@@ -28,7 +35,12 @@ function App() {
         onChange={handleColorChange}
       />
       <p>Selected Color: {color}</p>
-      <p>Color Name: {colorName}</p>
+      <p>Possible Color Names:</p>
+      <ul>
+        {colorNames.map((name, index) => (
+          <li key={index}>{name}</li>
+        ))}
+      </ul>
     </div>
   );
 }
