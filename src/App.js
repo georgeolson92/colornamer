@@ -1,4 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
+import './App.css';  // Import the CSS file
+import { debounce } from './debounce';  // Import debounce function
 
 // Define standard colors
 const standardColors = [
@@ -47,7 +49,27 @@ function App() {
     return closest;
   };
 
-  const handleImageMouseMove = async (event) => {
+  const fetchColorData = async (hex) => {
+    try {
+      const response = await fetch(`https://www.thecolorapi.com/id?hex=${hex.slice(1)}`);
+      const data = await response.json();
+
+      // Extract color names safely
+      const names = [data.name.value];
+      if (data.name.closest_named_hex && data.name.closest_named_hex !== data.name.value) {
+        names.push(data.name.closest_named_hex);
+      }
+
+      setColorNames(names);
+    } catch (error) {
+      console.error('Error fetching the color names:', error);
+      setColorNames(['Unknown']);  // Fallback if the API fails
+    }
+  };
+
+  const debouncedFetchColorData = useCallback(debounce(fetchColorData, 200), []); // 200ms debounce
+
+  const handleImageMouseMove = (event) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -69,22 +91,7 @@ function App() {
 
     setColor(hex);
 
-    // Fetch the color data from The Color API
-    try {
-      const response = await fetch(`https://www.thecolorapi.com/id?hex=${hex.slice(1)}`);
-      const data = await response.json();
-
-      // Extract color names safely
-      const names = [data.name.value];
-      if (data.name.closest_named_hex && data.name.closest_named_hex !== data.name.value) {
-        names.push(data.name.closest_named_hex);
-      }
-
-      setColorNames(names);
-    } catch (error) {
-      console.error('Error fetching the color names:', error);
-      setColorNames(['Unknown']);  // Fallback if the API fails
-    }
+    debouncedFetchColorData(hex);
 
     const closest = findClosestColor(rgb);
     setClosestColor(closest);
@@ -109,14 +116,14 @@ function App() {
             id="image"
             src={imageSrc}
             alt="Uploaded"
-            style={{ maxWidth: '100%', height: 'auto' }}
+            className="image"
             onMouseMove={handleImageMouseMove}
           />
-          <canvas ref={canvasRef} style={{ display: 'none' }} />
+          <canvas ref={canvasRef} className="canvas" />
         </>
       )}
       <p>Selected Color: {color}</p>
-      <p>Possible Color Names:</p>
+      <p>Possible Color Name:</p>
       <ul>
         {colorNames.map((name, index) => (
           <li key={index}>{name}</li>
