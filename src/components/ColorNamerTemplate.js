@@ -9,7 +9,11 @@ const ColorNamerTemplate = ({ children }) => {
         <h1>Color Finder</h1>
       </header>
       <main className="main-content">
-        {children}
+        <div className='container'>
+          <div className="colorPickerSection">
+            {children}
+          </div>
+        </div>
       </main>
       <footer className="footer">
         <p>© 2024 Color Finder</p>

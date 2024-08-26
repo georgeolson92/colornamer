@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import './App.css';
 import { debounce } from './utils/debounce';
-import { calculateDistance, findClosestColor } from './utils/colorUtils';
+import { findClosestColor } from './utils/colorUtils';
 import { fetchColorData } from './services/colorService';
 import { standardColors } from './constants/colors';
 import ColorNamerTemplate from './components/ColorNamerTemplate'; // Import the Template component
@@ -56,46 +56,46 @@ function App() {
 
   return (
     <ColorNamerTemplate>
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => {
-          const file = e.target.files[0];
-          if (file) {
-            setImageSrc(URL.createObjectURL(file));
-          }
-        }}
-      />
-      {imageSrc && (
-        <div className="image-container">
-          <img
-            id="image"
-            src={imageSrc}
-            alt="Uploaded"
-            className="image"
-            onMouseMove={handleImageMouseMove}
-            onMouseEnter={() => circleRef.current.style.display = 'block'}
-            onMouseLeave={() => circleRef.current.style.display = 'none'}
-          />
-          <canvas ref={canvasRef} className="canvas" />
-          <div id="cursor-circle" ref={circleRef}></div>
-        </div>
-      )}
-      <p>Selected Color: {color}</p>
-      <p>Possible Color Name:</p>
-      {loadingColors ? 'Loading...' : ''}
-      <div className="colorNames">
-        <ul>
-          {colorNames.map((name, index) => (
-            <li key={index}>{name}</li>
-          ))}
-        </ul>
-      </div>
-      <div className="closestColor">
-        {closestColor && (
-          <p>Closest Standard Color: {closestColor.name} ({closestColor.type})</p>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              setImageSrc(URL.createObjectURL(file));
+            }
+          }}
+        />
+        {imageSrc && (
+          <div className="image-container">
+            <img
+              id="image"
+              src={imageSrc}
+              alt="Uploaded"
+              className="image"
+              onMouseMove={handleImageMouseMove}
+              onMouseEnter={() => circleRef.current.style.display = 'block'}
+              onMouseLeave={() => circleRef.current.style.display = 'none'}
+            />
+            <canvas ref={canvasRef} className="canvas" />
+            <div id="cursor-circle" ref={circleRef}></div>
+          </div>
         )}
-      </div>
+        <div className="colorNames">
+          <p>Selected Color: {color}</p>
+          <p>Possible Color Name:</p>
+          <ul>
+            {loadingColors ? 'Loading...' : ''}
+            {colorNames.map((name, index) => (
+              <li key={index}>{name}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="closestColor">
+          {closestColor && (
+            <p>Closest Standard Color: <strong>{closestColor.name} ({closestColor.type})</strong></p>
+          )}
+        </div>
     </ColorNamerTemplate>
   );
 }
