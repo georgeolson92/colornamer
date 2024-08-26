@@ -24,6 +24,7 @@ function App() {
   const [colorNames, setColorNames] = useState([]);
   const [closestColor, setClosestColor] = useState(null);
   const [imageSrc, setImageSrc] = useState(null);
+  const [loadingColors, setLoadingColors] = useState(false);
   const canvasRef = useRef(null);
 
   const calculateDistance = (rgb1, rgb2) => {
@@ -50,6 +51,7 @@ function App() {
   };
 
   const fetchColorData = async (hex) => {
+    setLoadingColors(true); // Start loading
     try {
       const response = await fetch(`https://www.thecolorapi.com/id?hex=${hex.slice(1)}`);
       const data = await response.json();
@@ -64,6 +66,8 @@ function App() {
     } catch (error) {
       console.error('Error fetching the color names:', error);
       setColorNames(['Unknown']);  // Fallback if the API fails
+    } finally {
+      setLoadingColors(false); // End loading
     }
   };
 
@@ -124,14 +128,19 @@ function App() {
       )}
       <p>Selected Color: {color}</p>
       <p>Possible Color Name:</p>
-      <ul>
-        {colorNames.map((name, index) => (
-          <li key={index}>{name}</li>
-        ))}
-      </ul>
-      {closestColor && (
-        <p>Closest Standard Color: {closestColor.name} ({closestColor.type})</p>
-      )}
+      {loadingColors ? 'Loading...' : ''}
+      <div className="colorNames">
+        <ul>
+          {colorNames.map((name, index) => (
+            <li key={index}>{name}</li>
+          ))}
+        </ul>
+      </div>
+      <div className="closestColor">
+        {closestColor && (
+          <p>Closest Standard Color: {closestColor.name} ({closestColor.type})</p>
+        )}
+      </div>
     </div>
   );
 }
