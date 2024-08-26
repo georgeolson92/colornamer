@@ -7,3 +7,21 @@
 .canvas {
   display: none;
 }
+
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+#cursor-circle {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.5); /* Black border with transparency */
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.5);
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
