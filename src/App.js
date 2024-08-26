@@ -4,6 +4,7 @@ import { debounce } from './utils/debounce';
 import { calculateDistance, findClosestColor } from './utils/colorUtils';
 import { fetchColorData } from './services/colorService';
 import { standardColors } from './constants/colors';
+import ColorNamerTemplate from './components/ColorNamerTemplate'; // Import the Template component
 
 function App() {
   const [color, setColor] = useState('#ffffff');
@@ -54,8 +55,7 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>Color Finder</h1>
+    <ColorNamerTemplate>
       <input
         type="file"
         accept="image/*"
@@ -96,7 +96,7 @@ function App() {
           <p>Closest Standard Color: {closestColor.name} ({closestColor.type})</p>
         )}
       </div>
-    </div>
+    </ColorNamerTemplate>
   );
 }
 

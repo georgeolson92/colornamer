@@ -1,0 +1,44 @@
+/* ColorNamer.css */
+.template {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header, .footer {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  text-align: center;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+}
+
+.image {
+  max-width: 500px;
+  height: auto;
+}
+
+.canvas {
+  display: none;
+}
+
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+#cursor-circle {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.5); /* Black border with transparency */
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.5);
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
