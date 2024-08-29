@@ -11,12 +11,6 @@
   text-align: center;
 }
 
-.footer {
-  position: absolute;
-  bottom: 0px;
-  width: 100%;
-}
-
 .image {
   max-width: 500px;
   height: auto;

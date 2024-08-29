@@ -22,36 +22,47 @@ function App() {
     setLoadingColors(false);
   }, 200), []);
 
-  const handleImageMouseMove = (event) => {
-    const canvas = canvasRef.current;
-    const circle = circleRef.current;
-    if (!canvas || !circle) return;
-
-    const context = canvas.getContext('2d');
-    const image = document.getElementById('image');
+  const handleColorDetection = (x, y, rect, context, image) => {
     if (!context || !image) return;
 
-    const rect = image.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    const adjustedX = x - rect.left;
+    const adjustedY = y - rect.top;
 
-    canvas.width = image.width;
-    canvas.height = image.height;
+    canvasRef.current.width = image.width;
+    canvasRef.current.height = image.height;
     context.drawImage(image, 0, 0, image.width, image.height);
 
-    const pixel = context.getImageData(x, y, 1, 1).data;
+    const pixel = context.getImageData(adjustedX, adjustedY, 1, 1).data;
     const rgb = [pixel[0], pixel[1], pixel[2]];
     const hex = `#${rgb.map(value => value.toString(16).padStart(2, '0')).join('')}`;
 
     setColor(hex);
-
     debouncedFetchColorData(hex);
 
     const closest = findClosestColor(rgb, standardColors);
     setClosestColor(closest);
 
-    circle.style.left = `${event.clientX - rect.left}px`;
-    circle.style.top = `${event.clientY - rect.top}px`;
+    circleRef.current.style.left = `${adjustedX}px`;
+    circleRef.current.style.top = `${adjustedY}px`;
+  };
+
+  const handleImageMouseMove = (event) => {
+    const canvas = canvasRef.current;
+    const image = document.getElementById('image');
+    const rect = image.getBoundingClientRect();
+    const context = canvas.getContext('2d');
+
+    handleColorDetection(event.clientX, event.clientY, rect, context, image);
+  };
+
+  const handleImageTouchMove = (event) => {
+    const canvas = canvasRef.current;
+    const image = document.getElementById('image');
+    const rect = image.getBoundingClientRect();
+    const context = canvas.getContext('2d');
+
+    const touch = event.touches[0];
+    handleColorDetection(touch.clientX, touch.clientY, rect, context, image);
   };
 
   return (
@@ -74,8 +85,11 @@ function App() {
               alt="Uploaded"
               className="image"
               onMouseMove={handleImageMouseMove}
+              onTouchMove={handleImageTouchMove}
               onMouseEnter={() => circleRef.current.style.display = 'block'}
               onMouseLeave={() => circleRef.current.style.display = 'none'}
+              onTouchStart={() => circleRef.current.style.display = 'block'}
+              onTouchEnd={() => circleRef.current.style.display = 'none'}
             />
             <canvas ref={canvasRef} className="canvas" />
             <div id="cursor-circle" ref={circleRef}></div>
