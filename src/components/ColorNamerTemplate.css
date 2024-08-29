@@ -63,4 +63,8 @@
     overflow: hidden;
     height: 100%;
   }
+
+  .image {
+    max-height: 320px;
+  }
 }
