@@ -22,7 +22,7 @@ function App() {
     setLoadingColors(false);
   }, 200), []);
 
-  const handleImageMouseMove = (event) => {
+  const handleImageInteraction = (x, y) => {
     const canvas = canvasRef.current;
     const circle = circleRef.current;
     if (!canvas || !circle) return;
@@ -32,14 +32,14 @@ function App() {
     if (!context || !image) return;
 
     const rect = image.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    const adjustedX = x - rect.left;
+    const adjustedY = y - rect.top;
 
     canvas.width = image.width;
     canvas.height = image.height;
     context.drawImage(image, 0, 0, image.width, image.height);
 
-    const pixel = context.getImageData(x, y, 1, 1).data;
+    const pixel = context.getImageData(adjustedX, adjustedY, 1, 1).data;
     const rgb = [pixel[0], pixel[1], pixel[2]];
     const hex = `#${rgb.map(value => value.toString(16).padStart(2, '0')).join('')}`;
 
@@ -50,53 +50,66 @@ function App() {
     const closest = findClosestColor(rgb, standardColors);
     setClosestColor(closest);
 
-    circle.style.left = `${event.clientX - rect.left}px`;
-    circle.style.top = `${event.clientY - rect.top}px`;
+    circle.style.left = `${adjustedX}px`;
+    circle.style.top = `${adjustedY}px`;
+  };
+
+  const handleTouchMove = (event) => {
+    event.preventDefault();
+    const touch = event.touches[0];
+    handleImageInteraction(touch.clientX, touch.clientY);
+  };
+
+  const handleMouseMove = (event) => {
+    handleImageInteraction(event.clientX, event.clientY);
   };
 
   return (
     <ColorNamerTemplate>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => {
-            const file = e.target.files[0];
-            if (file) {
-              setImageSrc(URL.createObjectURL(file));
-            }
-          }}
-        />
-        {imageSrc && (
-          <div className="image-container">
-            <img
-              id="image"
-              src={imageSrc}
-              alt="Uploaded"
-              className="image"
-              onMouseMove={handleImageMouseMove}
-              onMouseEnter={() => circleRef.current.style.display = 'block'}
-              onMouseLeave={() => circleRef.current.style.display = 'none'}
-              draggable="false" // Disable dragging
-            />
-            <canvas ref={canvasRef} className="canvas" />
-            <div id="cursor-circle" ref={circleRef}></div>
-          </div>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          const file = e.target.files[0];
+          if (file) {
+            setImageSrc(URL.createObjectURL(file));
+          }
+        }}
+      />
+      {imageSrc && (
+        <div className="image-container">
+          <img
+            id="image"
+            src={imageSrc}
+            alt="Uploaded"
+            className="image"
+            onMouseMove={handleMouseMove}
+            onMouseEnter={() => circleRef.current.style.display = 'block'}
+            onMouseLeave={() => circleRef.current.style.display = 'none'}
+            onTouchStart={() => circleRef.current.style.display = 'block'}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={() => circleRef.current.style.display = 'none'}
+            draggable="false"
+          />
+          <canvas ref={canvasRef} className="canvas" />
+          <div id="cursor-circle" ref={circleRef}></div>
+        </div>
+      )}
+      <div className="colorNames">
+        <p>Selected Color: {color}</p>
+        <p>Possible Color Name:</p>
+        <ul>
+          {loadingColors ? 'Loading...' : ''}
+          {colorNames.map((name, index) => (
+            <li key={index}>{name}</li>
+          ))}
+        </ul>
+      </div>
+      <div className="closestColor">
+        {closestColor && (
+          <p>Closest Standard Color: <strong>{closestColor.name} ({closestColor.type})</strong></p>
         )}
-        <div className="colorNames">
-          <p>Selected Color: {color}</p>
-          <p>Possible Color Name:</p>
-          <ul>
-            {loadingColors ? 'Loading...' : ''}
-            {colorNames.map((name, index) => (
-              <li key={index}>{name}</li>
-            ))}
-          </ul>
-        </div>
-        <div className="closestColor">
-          {closestColor && (
-            <p>Closest Standard Color: <strong>{closestColor.name} ({closestColor.type})</strong></p>
-          )}
-        </div>
+      </div>
     </ColorNamerTemplate>
   );
 }
