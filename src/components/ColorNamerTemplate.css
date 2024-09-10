@@ -65,7 +65,9 @@
   }
 
   .image {
-    max-height: 320px;
+    height: 320px; /* Set a fixed height */
+    width: auto; /* Maintain aspect ratio by automatically adjusting width */
+    max-width: 100%; /* Prevent the image from exceeding the container's width */
   }
 
   #cursor-circle {
