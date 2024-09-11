@@ -1,77 +1,13 @@
-/* ColorNamer.css */
-.template {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.header, .footer {
-  background-color: #f8f9fa;
-  padding: 1rem;
-  text-align: center;
-}
-
-.image {
-  max-width: 500px;
-  width:100%;
-  height: auto;
-}
-
-.canvas {
-  display: none;
-}
-
-.image-container {
-  position: relative;
-  display: inline-block;
-}
-
-#cursor-circle {
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  border: 2px solid rgba(0, 0, 0, 0.5); /* Black border with transparency */
-  pointer-events: none;
-  background: rgba(0, 0, 0, 0.5);
-  transform: translate(-50%, -50%);
-  display: none;
-}
-
-.colorPickerSection {
-  text-align: center;
-  max-width: 700px;
-  margin: 0px auto;
-}
-
-.colorNames, .closestColor {
-  margin-top: 15px;
-  text-align: left;
-}
-
-.colorNames ul li {
-  font-weight: bold;
-}
-
-.colorPickerSection input {
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
-@media only screen and (max-width: 600px) {
-  html, body {
-    overflow: hidden;
-    height: 100%;
-  }
-
-  .image {
-    height: 320px; /* Set a fixed height */
-    width: auto; /* Maintain aspect ratio by automatically adjusting width */
-    max-width: 100%; /* Prevent the image from exceeding the container's width */
-  }
-
-  #cursor-circle {
-    width: 30px;
-    height: 30px;
-  }
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }

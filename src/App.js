@@ -1,13 +1,13 @@
-import React, { useState, useRef, useCallback } from 'react';
-import './App.css';
-import { debounce } from './utils/debounce';
-import { findClosestColor } from './utils/colorUtils';
-import { fetchColorData } from './services/colorService';
-import { standardColors } from './constants/colors';
-import ColorNamerTemplate from './components/ColorNamerTemplate'; // Import the Template component
+import React, { useState, useRef, useCallback } from "react";
+import "./App.css";
+import { debounce } from "./utils/debounce";
+import { findClosestColor } from "./utils/colorUtils";
+import { fetchColorData } from "./services/colorService";
+import { standardColors } from "./constants/colors";
+import ColorNamerTemplate from "./components/ColorNamerTemplate"; // Import the Template component
 
 function App() {
-  const [color, setColor] = useState('#ffffff');
+  const [color, setColor] = useState("#ffffff");
   const [colorNames, setColorNames] = useState([]);
   const [closestColor, setClosestColor] = useState(null);
   const [imageSrc, setImageSrc] = useState(null);
@@ -15,20 +15,23 @@ function App() {
   const canvasRef = useRef(null);
   const circleRef = useRef(null);
 
-  const debouncedFetchColorData = useCallback(debounce(async (hex) => {
-    setLoadingColors(true);
-    const names = await fetchColorData(hex);
-    setColorNames(names);
-    setLoadingColors(false);
-  }, 200), []);
+  const debouncedFetchColorData = useCallback(
+    debounce(async (hex) => {
+      setLoadingColors(true);
+      const names = await fetchColorData(hex);
+      setColorNames(names);
+      setLoadingColors(false);
+    }, 200),
+    []
+  );
 
   const handleImageInteraction = (x, y) => {
     const canvas = canvasRef.current;
     const circle = circleRef.current;
     if (!canvas || !circle) return;
 
-    const context = canvas.getContext('2d');
-    const image = document.getElementById('image');
+    const context = canvas.getContext("2d");
+    const image = document.getElementById("image");
     if (!context || !image) return;
 
     const rect = image.getBoundingClientRect();
@@ -41,7 +44,9 @@ function App() {
 
     const pixel = context.getImageData(adjustedX, adjustedY, 1, 1).data;
     const rgb = [pixel[0], pixel[1], pixel[2]];
-    const hex = `#${rgb.map(value => value.toString(16).padStart(2, '0')).join('')}`;
+    const hex = `#${rgb
+      .map((value) => value.toString(16).padStart(2, "0"))
+      .join("")}`;
 
     setColor(hex);
 
@@ -66,16 +71,18 @@ function App() {
 
   return (
     <ColorNamerTemplate>
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => {
-          const file = e.target.files[0];
-          if (file) {
-            setImageSrc(URL.createObjectURL(file));
-          }
-        }}
-      />
+      <div class="input-container">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              setImageSrc(URL.createObjectURL(file));
+            }
+          }}
+        />
+      </div>
       {imageSrc && (
         <div className="image-container">
           <img
@@ -84,11 +91,11 @@ function App() {
             alt="Uploaded"
             className="image"
             onMouseMove={handleMouseMove}
-            onMouseEnter={() => circleRef.current.style.display = 'block'}
-            onMouseLeave={() => circleRef.current.style.display = 'none'}
-            onTouchStart={() => circleRef.current.style.display = 'block'}
+            onMouseEnter={() => (circleRef.current.style.display = "block")}
+            onMouseLeave={() => (circleRef.current.style.display = "none")}
+            onTouchStart={() => (circleRef.current.style.display = "block")}
             onTouchMove={handleTouchMove}
-            onTouchEnd={() => circleRef.current.style.display = 'none'}
+            onTouchEnd={() => (circleRef.current.style.display = "none")}
             draggable="false"
           />
           <canvas ref={canvasRef} className="canvas" />
@@ -99,7 +106,7 @@ function App() {
         <p>Selected Color: {color}</p>
         <p>Possible Color Name:</p>
         <ul>
-          {loadingColors ? 'Loading...' : ''}
+          {loadingColors ? "Loading..." : ""}
           {colorNames.map((name, index) => (
             <li key={index}>{name}</li>
           ))}
@@ -107,7 +114,12 @@ function App() {
       </div>
       <div className="closestColor">
         {closestColor && (
-          <p>Closest Standard Color: <strong>{closestColor.name} ({closestColor.type})</strong></p>
+          <p>
+            Closest Standard Color:{" "}
+            <strong>
+              {closestColor.name} ({closestColor.type})
+            </strong>
+          </p>
         )}
       </div>
     </ColorNamerTemplate>
