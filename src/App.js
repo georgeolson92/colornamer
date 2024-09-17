@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from "react";
 import "./App.css";
 import { debounce } from "./utils/debounce";
-import { findClosestColor } from "./utils/colorUtils";
+import { findClosestColor, hexToRgb, luminance, contrastRatio } from "./utils/colorUtils";
 import { fetchColorData } from "./services/colorService";
 import { standardColors } from "./constants/colors";
 import ColorNamerTemplate from "./components/ColorNamerTemplate"; // Import the Template component
@@ -11,16 +11,13 @@ function App() {
   const [colorNames, setColorNames] = useState([]);
   const [closestColor, setClosestColor] = useState(null);
   const [imageSrc, setImageSrc] = useState(null);
-  const [loadingColors, setLoadingColors] = useState(false);
   const canvasRef = useRef(null);
   const circleRef = useRef(null);
 
   const debouncedFetchColorData = useCallback(
     debounce(async (hex) => {
-      setLoadingColors(true);
       const names = await fetchColorData(hex);
       setColorNames(names);
-      setLoadingColors(false);
     }, 200),
     []
   );
@@ -69,6 +66,19 @@ function App() {
     handleImageInteraction(event.clientX, event.clientY);
   };
 
+  const getTextColor = (backgroundColor) => {
+    const [r, g, b] = hexToRgb(backgroundColor);
+    const bgLuminance = luminance(r, g, b);
+    const whiteLuminance = luminance(255, 255, 255);
+  
+    // Calculate contrast ratios
+    const contrastWithWhite = contrastRatio(bgLuminance, whiteLuminance);
+  
+    // Return black or white text based on the contrast
+    return contrastWithWhite >= 4.5 ? "#ffffff" : "#000000";
+  };
+  
+
   return (
     <ColorNamerTemplate>
       <div class="input-container">
@@ -103,10 +113,9 @@ function App() {
         </div>
       )}
       <div className="colorNames">
-        <p>Selected Color: {color}</p>
+        <p>Selected Color: <span className='color-block' style={{ backgroundColor: color, color: getTextColor(color) }}>{color}</span></p>
         <p>Possible Color Name:</p>
         <ul>
-          {loadingColors ? "Loading..." : ""}
           {colorNames.map((name, index) => (
             <li key={index}>{name}</li>
           ))}

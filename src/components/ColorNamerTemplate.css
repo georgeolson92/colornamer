@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'NjaNaruto';
+  src: url('/public/assets/njnaruto.ttf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -10,4 +17,36 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.template {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header,
+.footer {
+  background-color: #121212;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+.header {
+  font-family: 'NjaNaruto', sans-serif;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+  html,
+  body {
+    overflow: hidden;
+    height: 100%;
+  }
 }

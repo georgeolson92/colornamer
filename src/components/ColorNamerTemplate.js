@@ -13,7 +13,7 @@ const ColorNamerTemplate = ({ children }) => {
         </div>
       </main>
       <footer className="footer">
-        <p>© 2024 Color Finder</p>
+        © 2024 Color Finder
       </footer>
     </div>
   );

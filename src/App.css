@@ -1,25 +1,16 @@
-.template {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.input-container {
-  width: 100%;
-  display: block;
-}
-
-.header,
-.footer {
-  background-color: #f8f9fa;
-  padding: 1rem;
-  text-align: center;
+body {
+  color: white;
 }
 
 .image {
   max-width: 500px;
   width: 100%;
   height: auto;
+}
+
+.input-container {
+  width: 100%;
+  display: block;
 }
 
 .canvas {
@@ -47,6 +38,7 @@
   text-align: center;
   max-width: 700px;
   margin: 0px auto;
+  color: white;
 }
 
 .colorNames,
@@ -64,12 +56,12 @@
   margin-bottom: 15px;
 }
 
+.color-block {
+  padding: 0.4em;
+  font-weight: bold;
+}
+
 @media only screen and (max-width: 600px) {
-  html,
-  body {
-    overflow: hidden;
-    height: 100%;
-  }
 
   .image {
     height: 320px;
