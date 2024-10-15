@@ -5,7 +5,7 @@ const ColorNamerTemplate = ({ children }) => {
   return (
     <div className="template">
       <header className="header">
-        <h1>Color Finder</h1>
+        <h1>Color Namer</h1>
       </header>
       <main className="main-content">
         <div className="container">
@@ -13,7 +13,7 @@ const ColorNamerTemplate = ({ children }) => {
         </div>
       </main>
       <footer className="footer">
-        © 2024 Color Finder
+        © 2024 Color Namer
       </footer>
     </div>
   );
