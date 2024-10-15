@@ -28,26 +28,31 @@ Follow these instructions to get a copy of the project up and running on your lo
    ```bash
    git clone https://github.com/yourusername/colornamer.git
    cd colornamer
+   ```
 
 2. **Install dependencies**:
 
 Using npm:
     ```bash
     npm install
+    ```
 
 Or using yarn:
     ```bash
     yarn install
+    ```
 
 3. **Start the development server:**
 
 Using npm:
     ```bash
     npm install
+    ```
 
 Or using yarn:  
     ```bash
     yarn start
+    ```
 
 The app will open in your default browser at http://localhost:3000.
 
