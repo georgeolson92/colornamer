@@ -10,7 +10,7 @@ Colornamer is a React application that allows users to upload an image and inter
 
 ## Demo
 
-[Insert a link to a live demo or include a GIF/screenshot here]
+https://colornamer.vercel.app/
 
 ## Getting Started
 
@@ -70,6 +70,6 @@ Contributions are welcome! Feel free to submit a pull request or open an issue i
 5. Open a pull request.
 
 ## Contact
-For any questions or suggestions, please reach out at [olsongeorgej@gmail.com].
+For any questions or suggestions, please reach out at olsongeorgej@gmail.com.
 
 
