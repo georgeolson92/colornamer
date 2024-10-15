@@ -23,14 +23,14 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 ### Installation
 
-1. **Clone the repository**:
+**Clone the repository**:
 
    ```
    git clone https://github.com/yourusername/colornamer.git
    cd colornamer
    ```
 
-2. **Install dependencies**:
+**Install dependencies**:
 
 Using npm:
     ```
@@ -42,7 +42,7 @@ Or using yarn:
     yarn install
     ```
 
-3. **Start the development server:**
+**Start the development server:**
 
 Using npm:
     ```
