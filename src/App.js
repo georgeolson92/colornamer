@@ -1,15 +1,15 @@
 import React, { useState, useRef, useCallback } from "react";
 import "./App.css";
 import { debounce } from "./utils/debounce";
-import { findClosestColor, hexToRgb, luminance, contrastRatio } from "./utils/colorUtils";
+//import { findClosestColor, hexToRgb, luminance, contrastRatio } from "./utils/colorUtils";
 import { fetchColorData } from "./services/colorService";
-import { standardColors } from "./constants/colors";
+//import { standardColors } from "./constants/colors";
 import ColorNamerTemplate from "./components/ColorNamerTemplate"; // Import the Template component
 
 function App() {
   const [color, setColor] = useState("#ffffff");
   const [colorNames, setColorNames] = useState([]);
-  const [closestColor, setClosestColor] = useState(null);
+  //const [closestColor, setClosestColor] = useState(null);
   const [imageSrc, setImageSrc] = useState(null);
   const canvasRef = useRef(null);
   const circleRef = useRef(null);
@@ -49,8 +49,8 @@ function App() {
 
     debouncedFetchColorData(hex);
 
-    const closest = findClosestColor(rgb, standardColors);
-    setClosestColor(closest);
+    /*const closest = findClosestColor(rgb, standardColors);
+    setClosestColor(closest);*/
 
     circle.style.left = `${adjustedX}px`;
     circle.style.top = `${adjustedY}px`;
@@ -120,16 +120,6 @@ function App() {
             <li key={index}>{name}</li>
           ))}
         </ul>
-      </div>
-      <div className="closestColor">
-        {closestColor && (
-          <p>
-            Closest Standard Color:{" "}
-            <strong>
-              {closestColor.name} ({closestColor.type})
-            </strong>
-          </p>
-        )}
       </div>
     </ColorNamerTemplate>
   );
