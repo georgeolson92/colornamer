@@ -25,34 +25,30 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 **Clone the repository**:
 
-   ```
-   git clone https://github.com/yourusername/colornamer.git
-   cd colornamer
-   ```
+```
+git clone https://github.com/yourusername/colornamer.git
+cd colornamer
+```
 
 **Install dependencies**:
 
 Using npm:
-    ```
-    npm install
-    ```
+`    npm install
+   `
 
 Or using yarn:
-    ```
-    yarn install
-    ```
+`    yarn install
+   `
 
 **Start the development server:**
 
 Using npm:
-    ```
-    npm install
-    ```
+`    npm start
+   `
 
 Or using yarn:  
-    ```
-    yarn start
-    ```
+ `    yarn start
+   `
 
 The app will open in your default browser at http://localhost:3000.
 
@@ -63,9 +59,11 @@ The app will open in your default browser at http://localhost:3000.
 3. View the details of the detected colors in real-time.
 
 ## Built With
+
 - React - JavaScript library for building user interfaces.
 
 ## Contributing
+
 Contributions are welcome! Feel free to submit a pull request or open an issue if you have any suggestions or find a bug.
 
 1. Fork the project.
@@ -75,6 +73,5 @@ Contributions are welcome! Feel free to submit a pull request or open an issue i
 5. Open a pull request.
 
 ## Contact
+
 For any questions or suggestions, please reach out at olsongeorgej@gmail.com.
-
-

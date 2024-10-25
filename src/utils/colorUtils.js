@@ -25,7 +25,9 @@ const findClosestColor = (rgb, standardColors) => {
 
 // Helper to convert hex to RGB
 const hexToRgb = (hex) => {
-  let r = 0, g = 0, b = 0;
+  let r = 0,
+    g = 0,
+    b = 0;
   if (hex.length === 4) {
     r = parseInt(hex[1] + hex[1], 16);
     g = parseInt(hex[2] + hex[2], 16);
@@ -52,5 +54,10 @@ const contrastRatio = (lum1, lum2) => {
   return (Math.max(lum1, lum2) + 0.05) / (Math.min(lum1, lum2) + 0.05);
 };
 
-
-export { calculateDistance, findClosestColor, hexToRgb, luminance, contrastRatio };
+export {
+  calculateDistance,
+  findClosestColor,
+  hexToRgb,
+  luminance,
+  contrastRatio,
+};

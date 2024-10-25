@@ -12,9 +12,7 @@ const ColorNamerTemplate = ({ children }) => {
           <div className="colorPickerSection">{children}</div>
         </div>
       </main>
-      <footer className="footer">
-        © 2024 Color Namer
-      </footer>
+      <footer className="footer">© 2024 Color Namer</footer>
     </div>
   );
 };

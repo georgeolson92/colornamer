@@ -70,14 +70,13 @@ function App() {
     const [r, g, b] = hexToRgb(backgroundColor);
     const bgLuminance = luminance(r, g, b);
     const whiteLuminance = luminance(255, 255, 255);
-  
+
     // Calculate contrast ratios
     const contrastWithWhite = contrastRatio(bgLuminance, whiteLuminance);
-  
+
     // Return black or white text based on the contrast
     return contrastWithWhite >= 4.5 ? "#ffffff" : "#000000";
   };
-  
 
   return (
     <ColorNamerTemplate>
@@ -113,7 +112,15 @@ function App() {
         </div>
       )}
       <div className="colorNames">
-        <p>Selected Color: <span className='color-block' style={{ backgroundColor: color, color: getTextColor(color) }}>{color}</span></p>
+        <p>
+          Selected Color:{" "}
+          <span
+            className="color-block"
+            style={{ backgroundColor: color, color: getTextColor(color) }}
+          >
+            {color}
+          </span>
+        </p>
         <p>Possible Color Name:</p>
         <ul>
           {colorNames.map((name, index) => (

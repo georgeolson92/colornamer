@@ -1,6 +1,6 @@
 @font-face {
-  font-family: 'NjaNaruto';
-  src: url('/public/assets/njnaruto.ttf') format('opentype');
+  font-family: "NjaNaruto";
+  src: url("/public/assets/njnaruto.ttf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }
@@ -34,7 +34,7 @@ code {
 }
 
 .header {
-  font-family: 'NjaNaruto', sans-serif;
+  font-family: "NjaNaruto", sans-serif;
 }
 
 .footer {
