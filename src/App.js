@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from "react";
 import "./App.css";
 import { debounce } from "./utils/debounce";
-//import { findClosestColor, hexToRgb, luminance, contrastRatio } from "./utils/colorUtils";
+import { hexToRgb, luminance, contrastRatio } from "./utils/colorUtils";
 import { fetchColorData } from "./services/colorService";
 //import { standardColors } from "./constants/colors";
 import ColorNamerTemplate from "./components/ColorNamerTemplate"; // Import the Template component
