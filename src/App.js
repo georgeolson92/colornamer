@@ -3,14 +3,13 @@ import "./App.css";
 import { debounce } from "./utils/debounce";
 import { hexToRgb, luminance, contrastRatio } from "./utils/colorUtils";
 import { fetchColorData } from "./services/colorService";
-//import { standardColors } from "./constants/colors";
-import ColorNamerTemplate from "./components/ColorNamerTemplate"; // Import the Template component
+import ColorNamerTemplate from "./components/ColorNamerTemplate";
 
 function App() {
   const [color, setColor] = useState("#ffffff");
   const [colorNames, setColorNames] = useState([]);
-  //const [closestColor, setClosestColor] = useState(null);
   const [imageSrc, setImageSrc] = useState(null);
+  const [clicked, setClicked] = useState(false); // Track if the circle is clicked
   const canvasRef = useRef(null);
   const circleRef = useRef(null);
 
@@ -46,24 +45,30 @@ function App() {
       .join("")}`;
 
     setColor(hex);
-
     debouncedFetchColorData(hex);
-
-    /*const closest = findClosestColor(rgb, standardColors);
-    setClosestColor(closest);*/
 
     circle.style.left = `${adjustedX}px`;
     circle.style.top = `${adjustedY}px`;
+    circle.style.display = "block"; // Ensure the circle is displayed on click
   };
 
   const handleTouchMove = (event) => {
-    event.preventDefault();
-    const touch = event.touches[0];
-    handleImageInteraction(touch.clientX, touch.clientY);
+    if (!clicked) {
+      event.preventDefault();
+      const touch = event.touches[0];
+      handleImageInteraction(touch.clientX, touch.clientY);
+    }
   };
 
   const handleMouseMove = (event) => {
-    handleImageInteraction(event.clientX, event.clientY);
+    if (!clicked) {
+      handleImageInteraction(event.clientX, event.clientY);
+    }
+  };
+
+  const handleClick = (event) => {
+    setClicked(true); // Set clicked to true to persist the circle's visibility
+    handleImageInteraction(event.clientX, event.clientY); // Update circle position on each click
   };
 
   const getTextColor = (backgroundColor) => {
@@ -71,16 +76,14 @@ function App() {
     const bgLuminance = luminance(r, g, b);
     const whiteLuminance = luminance(255, 255, 255);
 
-    // Calculate contrast ratios
     const contrastWithWhite = contrastRatio(bgLuminance, whiteLuminance);
 
-    // Return black or white text based on the contrast
     return contrastWithWhite >= 4.5 ? "#ffffff" : "#000000";
   };
 
   return (
     <ColorNamerTemplate>
-      <div class="input-container">
+      <div className="input-container">
         <input
           type="file"
           accept="image/*"
@@ -101,14 +104,15 @@ function App() {
             className="image"
             onMouseMove={handleMouseMove}
             onMouseEnter={() => (circleRef.current.style.display = "block")}
-            onMouseLeave={() => (circleRef.current.style.display = "none")}
+            onMouseLeave={() => !clicked && (circleRef.current.style.display = "none")}
+            onClick={handleClick} // Moves the circle to the click position
             onTouchStart={() => (circleRef.current.style.display = "block")}
             onTouchMove={handleTouchMove}
-            onTouchEnd={() => (circleRef.current.style.display = "none")}
+            onTouchEnd={() => !clicked && (circleRef.current.style.display = "none")}
             draggable="false"
           />
           <canvas ref={canvasRef} className="canvas" />
-          <div id="cursor-circle" ref={circleRef}></div>
+          <div id="cursor-circle" ref={circleRef} style={{ display: clicked ? "block" : "none" }}></div>
         </div>
       )}
       <div className="colorNames">
