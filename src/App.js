@@ -13,6 +13,7 @@ function App() {
   const canvasRef = useRef(null);
   const circleRef = useRef(null);
 
+  // Create a debounced function to fetch color names after a delay
   const debouncedFetchColorData = useCallback(
     debounce(async (hex) => {
       const names = await fetchColorData(hex);
@@ -21,6 +22,8 @@ function App() {
     []
   );
 
+  // Implements getImageData functionality to get pixel color data from image 
+  // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/getImageData
   const handleImageInteraction = (x, y) => {
     const canvas = canvasRef.current;
     const circle = circleRef.current;
@@ -38,6 +41,7 @@ function App() {
     canvas.height = image.height;
     context.drawImage(image, 0, 0, image.width, image.height);
 
+    // Get color data of the pixel at adjusted coordinates
     const pixel = context.getImageData(adjustedX, adjustedY, 1, 1).data;
     const rgb = [pixel[0], pixel[1], pixel[2]];
     const hex = `#${rgb
@@ -47,11 +51,13 @@ function App() {
     setColor(hex);
     debouncedFetchColorData(hex);
 
+    // Position and display the cursor circle on the canvas
     circle.style.left = `${adjustedX}px`;
     circle.style.top = `${adjustedY}px`;
     circle.style.display = "block"; // Ensure the circle is displayed on click
   };
 
+   // Handle touch movement for mobile devices
   const handleTouchMove = (event) => {
     if (!clicked) {
       event.preventDefault();
@@ -71,6 +77,7 @@ function App() {
     handleImageInteraction(event.clientX, event.clientY); // Update circle position on each click
   };
 
+  // Function to determine the text color based on the background color's luminance
   const getTextColor = (backgroundColor) => {
     const [r, g, b] = hexToRgb(backgroundColor);
     const bgLuminance = luminance(r, g, b);
@@ -78,6 +85,7 @@ function App() {
 
     const contrastWithWhite = contrastRatio(bgLuminance, whiteLuminance);
 
+    // Return white text if contrast is sufficient, else return black
     return contrastWithWhite >= 4.5 ? "#ffffff" : "#000000";
   };
 

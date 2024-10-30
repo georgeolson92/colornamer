@@ -21,7 +21,8 @@ const findClosestColor = (rgb, standardColors) => {
   return closest;
 };
 
-// Utility functions to assist with text color contrast ratio from Web Content Guidelines - https://www.w3.org/TR/WCAG21/#contrast-minimum
+// Utility functions to assist with text color contrast ratio from Web Content Guidelines
+// https://www.w3.org/TR/WCAG21/#contrast-minimum
 
 // Helper to convert hex to RGB
 const hexToRgb = (hex) => {
