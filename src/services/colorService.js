@@ -1,3 +1,4 @@
+// Used to get name of closest color to hex value
 export const fetchColorData = async (hex) => {
   try {
     const response = await fetch(
